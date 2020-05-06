@@ -33,6 +33,9 @@ export default {
     return {
       title
     }
+  },
+  mounted () {
+    this.$vuetify.rtl = true
   }
 }
 </script>

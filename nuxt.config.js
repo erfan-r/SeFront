@@ -30,11 +30,16 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/iransans/iransans.css',
+    '~/assets/base.scss'
+
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/mixin.js',
+    { src: '~/plugins/vuex-persist', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -48,13 +53,39 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: 'https://exam.hadaf.academy/api',
+    browserBaseURL: 'https://exam.hadaf.academy/api'
   },
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      home: '/'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'users/login', method: 'post', propertyName: 'user.access_token' },
+          logout: { url: 'users/logout', method: 'get' },
+          // user: false
+          user: { url: '/users/profile', method: 'get', propertyName: false }
+        },
+        tokenRequired: true,
+        tokenType: ''
+      }
+    }
+  },
+  router: {
+    middleware: ['auth']
+  },
+
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
@@ -62,7 +93,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
