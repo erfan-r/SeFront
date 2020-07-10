@@ -4,23 +4,24 @@
       justify-center
       align-center
     >
-      <v-flex
-        xs12
-        md6
-      >
-        <v-card>
-          <v-card-text class="text-center">
-            <span class="text-center error--text" style="font-size: 24pt;">توجه</span>
-            <p class="ma-8 text-justified" style="font-size: 12pt;">
-              برای شروع آزمون از دکمه زیر اسفاده کنید.<br><br>
-              در صورت refresh شدن صفحه تمامی پاسخ‌های شما از بین خواهد رفت.<br><br>
-              انجام آزمون فقط در زمان تایین شده امکان‌پذیر خواهد بود و در صورتی که آزمون شما بعد از زمان مشخص شده به
-              اتمام برسد، نتیجه آن ثبت نخواهد شد.
-            </p>
-            <v-btn class="success" @click="viewExam">شروع آزمون</v-btn>
-          </v-card-text>
-        </v-card>
-      </v-flex>
+      Under construction ...
+<!--      <v-flex-->
+<!--        xs12-->
+<!--        md6-->
+<!--      >-->
+<!--        <v-card>-->
+<!--          <v-card-text class="text-center">-->
+<!--            <span class="text-center error&#45;&#45;text" style="font-size: 24pt;">توجه</span>-->
+<!--            <p class="ma-8 text-justified" style="font-size: 12pt;">-->
+<!--              برای شروع آزمون از دکمه زیر اسفاده کنید.<br><br>-->
+<!--              در صورت refresh شدن صفحه تمامی پاسخ‌های شما از بین خواهد رفت.<br><br>-->
+<!--              انجام آزمون فقط در زمان تایین شده امکان‌پذیر خواهد بود و در صورتی که آزمون شما بعد از زمان مشخص شده به-->
+<!--              اتمام برسد، نتیجه آن ثبت نخواهد شد.-->
+<!--            </p>-->
+<!--            <v-btn class="success" @click="viewExam">شروع آزمون</v-btn>-->
+<!--          </v-card-text>-->
+<!--        </v-card>-->
+<!--      </v-flex>-->
     </v-layout>
     <v-dialog
       v-model="dialog"

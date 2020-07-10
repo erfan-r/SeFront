@@ -7,7 +7,7 @@ export default {
   */
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: 'proposal manager',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,7 +23,7 @@ export default {
   loading: { color: '#fff' },
   /* Dev Server Host and Port */
   server: {
-    host: '0.0.0.0',
+    host: 'localhost',
     port: 8000
   },
   /*
@@ -60,8 +60,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'https://exam.hadaf.academy/api',
-    browserBaseURL: 'https://exam.hadaf.academy/api'
+    baseURL: 'https://sbu-se-project.herokuapp.com/api',
+    browserBaseURL: 'https://sbu-se-project.herokuapp.com/api'
   },
   auth: {
     redirect: {
@@ -74,8 +74,7 @@ export default {
         endpoints: {
           login: { url: 'users/login', method: 'post', propertyName: 'user.access_token' },
           logout: { url: 'users/logout', method: 'get' },
-          // user: false
-          user: { url: '/users/profile', method: 'get', propertyName: false }
+          user: { url: '/users/profile', method: 'get', propertyName: 'result' }
         },
         tokenRequired: true,
         tokenType: ''

@@ -1,8 +1,8 @@
 {
-  "name": "hadaf-exam-front",
+  "name": "se-project-front",
   "version": "1.0.0",
-  "description": "Hadaf Examination Website",
-  "author": "S3000",
+  "description": "software engineering project website",
+  "author": "erfan15000",
   "private": true,
   "scripts": {
     "dev": "nuxt",

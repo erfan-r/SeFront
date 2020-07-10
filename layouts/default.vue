@@ -29,7 +29,7 @@
       fixed
       app
     >
-      <img src="logo_hadaf.png" style="height: 48px; width: 48px;">
+
       <v-spacer/>
       <v-toolbar-title v-text="title"/>
       <v-spacer/>
@@ -44,7 +44,6 @@
       :fixed="fixed"
       app
     >
-      <span>ویرانگار &copy; {{ toPersianNumber(1399) }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -71,7 +70,7 @@
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'برگزاری امتحان کنکور هدف'
+        title: 'پنل کاربری'
       }
     },
     mounted () {
@@ -80,6 +79,7 @@
     methods: {
       async logout () {
         await this.$auth.logout()
+        await this.$router.push(`login`)
       }
     }
   }
