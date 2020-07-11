@@ -29,7 +29,9 @@
       fixed
       app
     >
-
+      <v-btn outlined color="black"  class="mx-1">
+      {{this.$auth.user.edu_type? 'پژوهش محور':'آموزش محور'}}
+      </v-btn>
       <v-spacer/>
       <v-toolbar-title v-text="title"/>
       <v-spacer/>
@@ -74,12 +76,12 @@
       }
     },
     mounted () {
-      this.$vuetify.rtl = true
+
     },
     methods: {
-      async logout () {
-        await this.$auth.logout()
-        await this.$router.push(`login`)
+       logout () {
+         console.log('LOGGING OOOOOOOUUUUUUUT')
+         this.$auth.logout()
       }
     }
   }

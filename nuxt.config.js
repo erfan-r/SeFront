@@ -23,7 +23,7 @@ export default {
   loading: { color: '#fff' },
   /* Dev Server Host and Port */
   server: {
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 8000
   },
   /*
@@ -60,8 +60,9 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'https://sbu-se-project.herokuapp.com/api',
-    browserBaseURL: 'https://sbu-se-project.herokuapp.com/api'
+    baseURL: 'http://192.168.43.246:3000/api',
+    browserBaseURL: 'http://192.168.43.246:3000/api'
+    // browserBaseURL: 'https://sbu-se-project.herokuapp.com/api'
   },
   auth: {
     redirect: {
@@ -91,6 +92,7 @@ export default {
   */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    optionsPath: './vuetify.options.js',
     theme: {
       dark: false,
       themes: {

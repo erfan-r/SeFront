@@ -10,7 +10,7 @@
       <v-flex md6 xs12 justify-center>
         <v-card>
           <v-card-text>
-            <v-form v-model="proposal.valid" ref="proposalForm" @submit.prevent="addProposal">
+            <v-form v-model="valid" ref="proposalForm" @submit.prevent="addProposal">
               <v-flex xs12>
                 <v-text-field
                   v-model="proposal.title"
@@ -59,7 +59,7 @@
               </v-flex>
 
               <v-flex xs12>
-                <v-btn block color="primary" type="submit" :loading="proposal.loading">ثبت</v-btn>
+                <v-btn block color="primary" type="submit" :loading="loading">ثبت</v-btn>
               </v-flex>
             </v-form>
           </v-card-text>
@@ -90,15 +90,22 @@
     name: 'add_proposal',
     data () {
       return {
+        valid: false,
+        loading: false,
         proposal: {
-          valid: false,
           title: '',
           keywords: '',
           guide_prof: '',
-          summary: '',
-          loading: false
+          summary: ''
         },
-        profs: [],
+        profs: [
+          'دکتر شاملی',
+          'دکتر حقیقی',
+          'دکتر نشاطی',
+          'دکتر وحیدی',
+          'دکتر شمس فرد',
+          'دکتر علی اکبری'
+        ],
         snack_text: '',
         color: '',
         snackbar: false,
@@ -111,16 +118,25 @@
     methods: {
       addProposal () {
         if (this.$refs.proposalForm.validate()) {
-          this.proposal.loading = true
+          this.loading = true
+          this.proposal.keywords = this.proposal.keywords.split(' ')
+            this.$axios.$post(`/proposals`, this.proposal)
+            .then(response => {
+              this.loading = false
+              this.$router.push('/')
+            })
+            .catch(reason => {
+              this.loading = false
+              this.$router.push('/')
+            })
           console.log(this.proposal)
-
         }
       }
     },
     created () {
-      this.$axios.$get(`/groups/profs`).then(response => {
+      this.$axios.$get(`/users/profs`).then(response => {
         console.log(response)
-        this.profs = response.result.professors
+        this.profs = response.result
       }).catch(err => {
         console.log(err)
         this.snack_text = err.response.data.status

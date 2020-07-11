@@ -92,16 +92,11 @@
             }
           })
             .then((res) => {
-              // this.$router.push('/video-list')
               this.color = 'success'
               this.snack_text = 'با موفقیت وارد شدید!'
               this.snackbar = true
               console.log(res)
-              // let redirect = this.$auth.$storage.getUniversal('redirect')
-              // if (redirect) {
-              //   this.$router.push(redirect)
-              // } else {
-              // }
+              this.$router.push('/')
             })
             .catch(() => {
               this.login.loading = false

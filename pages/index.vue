@@ -79,22 +79,8 @@
           {text: 'وضعیت', value: 'approved', align: 'center', sortable: false},
           {text: '', value: 'actions', align: 'center', sortable: false}
         ],
-        proposals: [],
-        editedIndex: -1,
-        editedItem: {
-          name: '',
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0
-        },
-        defaultItem: {
-          name: '',
-          calories: 0,
-          fat: 0,
-          carbs: 0,
-          protein: 0
-        }
+        type: 1,
+        proposals: []
       }
     },
     components: {
@@ -107,7 +93,7 @@
 
     methods: {
       initialize () {
-        this.$axios.$get('/users/proposals').then(response => {
+        this.$axios.$get(`/users/proposals?type=${this.type}`).then(response => {
           // console.log(response)
           console.log(response)
           // this.snackbar('اطلاعات با موفقیت دریافت شدند', 'success')

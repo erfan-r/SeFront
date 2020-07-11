@@ -1,8 +1,30 @@
 import Vue from 'vue'
-import {mapMutations} from 'vuex'
+import { mapMutations } from 'vuex'
 
 Vue.mixin({
   methods: {
+    async setField (id) {
+      try {
+        const field = await this.$axios.$get(`fields/${id}?nodesc`)
+        this.$auth.$storage.setUniversal('field', field.data, true)
+        window.location = '/dashboard'
+      } catch (e) {
+        this.snackbar('خطا در دریافت اطلاعات سالن', 'error')
+        // console.log(e)
+      }
+    },
+    getField () {
+      return this.$auth.$storage.getUniversal('field', true)
+    },
+    number_format (number) {
+      return this.toPersianNumber(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))
+    },
+    slug (title) {
+      return title.toString().replace(new RegExp(' ', 'g'), '-')
+    },
+    deslug (title) {
+      return title.toString().replace(new RegExp('-', 'g'), ' ')
+    },
     snackbar (text, color, timeout) {
       this.setSnack({text, color, timeout})
     },
