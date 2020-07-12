@@ -100,7 +100,8 @@
               this.$router.push('/')
               else this.$router.push('/setField')
             })
-            .catch(() => {
+            .catch((reason) => {
+              console.log(reason)
               this.login.loading = false
               this.snackbar = true
               this.color = 'error'

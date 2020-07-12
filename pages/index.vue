@@ -25,10 +25,9 @@
           >
             <template v-slot:item.actions="{ item }">
               <v-btn @click="editItem(item)"
+                     class="text--white"
                      color="primary">
-                <v-icon>
-                  mdi-pencil
-                </v-icon>
+                جزئیات
               </v-btn>
 
             </template>

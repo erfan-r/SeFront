@@ -29,12 +29,14 @@
       fixed
       app
     >
-      <v-btn v-if="this.$auth.user.level === 1" outlined color="black"  class="mx-1">
-      {{this.$auth.user.edu_type? 'پژوهش محور':'آموزش محور'}}
-      </v-btn>
+      <span style="border: solid black 1px; border-radius: 5px" class="pa-1 mx-5" v-text="title"/>
+
+      <span v-if="this.$auth.user.level === 1" style="border: solid black 1px" class="ma-1">
+        {{this.$auth.user.edu_type? 'پژوهش محور':'آموزش محور'}}
+      </span>
       <v-menu v-if="this.$auth.user.level !== 1" offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn outlined v-on="on" >
+          <v-btn outlined v-on="on">
             <span>نوع فعالیت: &nbsp;</span>
             {{getType().name}}
           </v-btn>
@@ -48,8 +50,9 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-spacer/>
-      <v-toolbar-title v-text="title"/>
+      <v-btn outlined to="/freeTime" class="mx-5">
+        <span>تغییر تایم های کاری &nbsp;</span>
+      </v-btn>
       <v-spacer/>
       <v-icon @click="logout">mdi-exit-to-app</v-icon>
     </v-app-bar>
@@ -67,18 +70,18 @@
 </template>
 
 <script>
-  import * as firebase from "firebase";
+  import * as firebase from 'firebase'
   import 'firebase/messaging'
 
   const config = {
-    apiKey: "AIzaSyCIydTBNl3xrZjElCsbJUNGpwqfke8xBa4",
-    authDomain: "se-uni.firebaseapp.com",
-    databaseURL: "https://se-uni.firebaseio.com",
-    projectId: "se-uni",
-    storageBucket: "se-uni.appspot.com",
-    messagingSenderId: "761340183257",
-    appId: "1:761340183257:web:2d8cb7d4670f4d4854f4c8"
-  };
+    apiKey: 'AIzaSyCIydTBNl3xrZjElCsbJUNGpwqfke8xBa4',
+    authDomain: 'se-uni.firebaseapp.com',
+    databaseURL: 'https://se-uni.firebaseio.com',
+    projectId: 'se-uni',
+    storageBucket: 'se-uni.appspot.com',
+    messagingSenderId: '761340183257',
+    appId: '1:761340183257:web:2d8cb7d4670f4d4854f4c8'
+  }
   export default {
     data () {
       return {
@@ -88,7 +91,7 @@
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'پنل کاربری'
+        title: ' پنل کاربری ' + this.$auth.user.name
       }
     },
     computed: {
@@ -146,32 +149,41 @@
       }
     },
     mounted () {
-      Notification.requestPermission().then( async function(permission) {
+      Notification.requestPermission().then(async function (permission) {
         console.log(permission)
         if (permission == 'granted') {
           // window.location.reload()
 
         }
-      });
+      })
       this.initFire()
       // this.initFire()
       console.log(this.getType())
     },
+    created () {
+      if (!this.getType()) {
+        let t = {
+          name: 'استاد راهنما',
+          id: 2
+        }
+        this.setType(t)
+      }
+    },
     methods: {
-       logout () {
-         console.log('LOGGING OOOOOOOUUUUUUUT')
-         this.$auth.logout()
+      logout () {
+        console.log('LOGGING OOOOOOOUUUUUUUT')
+        this.$auth.logout()
       },
-      async initFire() {
+      async initFire () {
         firebase.initializeApp(config)
         console.log(firebase)
         const messaging = firebase.messaging()
-        messaging.usePublicVapidKey("BBPRSENJbGnhHS_PJeMHuUa9buQkFXhDXGch4fH44sXGmKGpeOFrWXcfZt4xDWWdSZ2spQdijqMk33TGNfmvK8A");
+        messaging.usePublicVapidKey('BBPRSENJbGnhHS_PJeMHuUa9buQkFXhDXGch4fH44sXGmKGpeOFrWXcfZt4xDWWdSZ2spQdijqMk33TGNfmvK8A')
         messaging.onMessage((payload) => {
           // console.log('Message received. ', payload.notification.notification);
           alert(payload.notification.message)
           // ...
-        });
+        })
 
         // navigator.serviceWorker.register('/firebase-messaging-sw.js').then(reg => {
         //   messaging.useServiceWorker(reg)
@@ -180,7 +192,6 @@
         // })
         let token = await messaging.getToken()
         console.log(token)
-
 
 
         //  let messaging = fire.setup()

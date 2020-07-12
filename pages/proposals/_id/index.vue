@@ -256,6 +256,25 @@
           <span class="yellow--text font-weight-thin text--darken-3">
             نتیجه ی نهایی پس از برگزاری شورای دانشکده به شما اعلام خواهد شد
           </span>
+          <div v-if="getType().id===5" class="mx-10">
+
+            <v-form v-model="valid" ref="finilizeForm" @submit.prevent="finilizeProposal(comment)">
+              <v-layout class="justify-center pa-1 py-2">
+                <v-checkbox v-model="isAccepted" label="تایید پروپوزال" class="mx-5"></v-checkbox>
+              </v-layout>
+              <v-text-field
+                v-if="!isAccepted"
+                v-model="comment"
+                shaped
+                :rules="[validationRules.required]"
+                prepend-icon="mdi-file"
+                label="علت رد پروپوزال"
+              ></v-text-field>
+              <v-flex xs12>
+                <v-btn block large color="primary" type="submit" :loading="loading">ثبت</v-btn>
+              </v-flex>
+            </v-form>
+          </div>
         </v-flex>
         <v-flex md11 v-if="status===7" class="blue lighten-5 text-center pa-1 ma-2"
                 style="border-radius: 6px">
@@ -414,6 +433,29 @@
             }
 
           this.$axios.$post(`/proposals/defense`, body)
+            .then(response => {
+              window.location.reload(true)
+            })
+            .catch(reason => {
+              this.loading = false
+            })
+          console.log(this.proposal)
+        }
+      },
+      finilizeProposal (comment) {
+        if (this.$refs.finilizeForm.validate()) {
+          this.loading = true
+          let body
+          if (comment)
+            body = {
+              proposal_id: this.$route.params.id,
+              comment: comment
+            }
+          else
+            body = {
+              proposal_id: this.$route.params.id
+            }
+          this.$axios.$post(`/proposals/final`, body)
             .then(response => {
               window.location.reload(true)
             })
