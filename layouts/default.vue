@@ -29,9 +29,25 @@
       fixed
       app
     >
-      <v-btn outlined color="black"  class="mx-1">
+      <v-btn v-if="this.$auth.user.level === 1" outlined color="black"  class="mx-1">
       {{this.$auth.user.edu_type? 'پژوهش محور':'آموزش محور'}}
       </v-btn>
+      <v-menu v-if="this.$auth.user.level !== 1" offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn outlined v-on="on" >
+            <span>نوع فعالیت: &nbsp;</span>
+            {{getType().name}}
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(type, i) in getTypes" :key="i" @click="setType(type)">
+            <v-list-item-action>
+              <v-icon color="green" v-show="type.id === getType().id">mdi-checkbox-marked-circle</v-icon>
+            </v-list-item-action>
+            <v-list-item-title v-text="type.name" class="text-xs-right"></v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-spacer/>
       <v-toolbar-title v-text="title"/>
       <v-spacer/>
@@ -57,26 +73,68 @@
         clipped: false,
         drawer: false,
         fixed: false,
-        items: [
-          {
-            icon: 'mdi-apps',
-            title: 'Welcome',
-            to: '/'
-          },
-          {
-            icon: 'mdi-chart-bubble',
-            title: 'Inspire',
-            to: '/inspire'
-          }
-        ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
         title: 'پنل کاربری'
       }
     },
+    computed: {
+      getTypes () {
+        let types
+        if (this.$auth.user.level === 2) {
+          types = [
+            {
+              name: 'استاد راهنما',
+              id: 2
+            },
+            {
+              name: 'داور',
+              id: 3
+            }
+          ]
+        }
+        if (this.$auth.user.level === 3) {
+          types = [
+            {
+              name: 'استاد راهنما',
+              id: 2
+            },
+            {
+              name: 'داور',
+              id: 3
+            },
+            {
+              name: 'مدیر گروه',
+              id: 4
+            }
+          ]
+        }
+        if (this.$auth.user.level === 4) {
+          types = [
+            {
+              name: 'استاد راهنما',
+              id: 2
+            },
+            {
+              name: 'داور',
+              id: 3
+            },
+            {
+              name: 'مدیر گروه',
+              id: 4
+            },
+            {
+              name: 'شورای دانشکده',
+              id: 5
+            }
+          ]
+        }
+        return types
+      }
+    },
     mounted () {
-
+      console.log(this.getType())
     },
     methods: {
        logout () {

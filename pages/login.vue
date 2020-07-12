@@ -96,7 +96,9 @@
               this.snack_text = 'با موفقیت وارد شدید!'
               this.snackbar = true
               console.log(res)
+              if (this.$auth.user.level === 1)
               this.$router.push('/')
+              else this.$router.push('/setField')
             })
             .catch(() => {
               this.login.loading = false

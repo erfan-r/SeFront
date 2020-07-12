@@ -7,10 +7,6 @@
       xs12
       md10
     >
-      <!--<div class="text-center">-->
-      <!--<logo />-->
-      <!--<vuetify-logo />-->
-      <!--</div>-->
       <v-card>
         <v-card-title class="font-weight-reqular">
           <v-layout>
@@ -45,8 +41,8 @@
             <template v-slot:no-data>
               <span>هیچ پروپوزالی وجود ندارد</span>
             </template>
-            <template v-slot:item.approved="{item}">
-              <span>{{item?"قبول":"رد"}}</span>
+            <template v-slot:item.status="{item}">
+              <span>{{statusText[item.status-1]}}</span>
             </template>
             <template v-slot:footer>
               <p class="text-center ma-8 font-weight-bold">با کلیک بر روی آیکن کنار هر پروپوزال وارد آن شوید</p>
@@ -66,6 +62,17 @@
   export default {
     data () {
       return {
+        statusText: [
+          'ثبت شده، در انتظار تعیین داوران',
+          'در انتظار تایید داوران',
+          'نیازمند انجام اصلاحات',
+          'تایید اولیه، در انتظار جلسه دفاع',
+          'اعلام نتیجه ی دفاع',
+          'اعلام نتیجه ی دفاع',
+          'اعلام نتیجه ی نهایی و رای شورای دانشکده',
+          'اعلام نتیجه ی نهایی و رای شورای دانشکده',
+          'رد شده در مرحله اول'
+        ],
         headers: [
           {
             text: 'موضوع',
@@ -73,13 +80,13 @@
             sortable: false,
             value: 'title'
           },
-          {text: 'نام دانشجو', value: 'student.name', align: 'center', sortable: false},
-          {text: 'شماره دانشجویی', value: 'student.org_id', align: 'center', sortable: false},
-          {text: 'استاد راهنما', value: 'guide_prof.name', align: 'center', sortable: false},
-          {text: 'وضعیت', value: 'approved', align: 'center', sortable: false},
+          {text: 'نام دانشجو', value: 'student', align: 'center', sortable: false},
+          {text: 'گروه آموزشی', value: 'group', align: 'center', sortable: false},
+          {text: 'استاد راهنما', value: 'guide_prof', align: 'center', sortable: false},
+          {text: 'وضعیت', value: 'status', align: 'center', sortable: false},
           {text: '', value: 'actions', align: 'center', sortable: false}
         ],
-        type: 1,
+        type: this.getType().id,
         proposals: []
       }
     },

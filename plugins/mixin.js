@@ -3,18 +3,17 @@ import { mapMutations } from 'vuex'
 
 Vue.mixin({
   methods: {
-    async setField (id) {
+    async setType (type) {
       try {
-        const field = await this.$axios.$get(`fields/${id}?nodesc`)
-        this.$auth.$storage.setUniversal('field', field.data, true)
-        window.location = '/dashboard'
+        this.$auth.$storage.setUniversal('type', type)
+        window.location = '/'
       } catch (e) {
-        this.snackbar('خطا در دریافت اطلاعات سالن', 'error')
+        this.snackbar('خطا در دریافت اطلاعات', 'error')
         // console.log(e)
       }
     },
-    getField () {
-      return this.$auth.$storage.getUniversal('field', true)
+    getType () {
+      return this.$auth.$storage.getUniversal('type', true)
     },
     number_format (number) {
       return this.toPersianNumber(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))
