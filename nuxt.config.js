@@ -39,7 +39,8 @@ export default {
   */
   plugins: [
     '~/plugins/mixin.js',
-    { src: '~/plugins/vuex-persist', ssr: false }
+    { src: '~/plugins/vuex-persist', ssr: false },
+    { src: '~/plugins/fire', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -48,12 +49,12 @@ export default {
     '@nuxtjs/vuetify',
   ],
   /*
-  ** Nuxt.js modules
+  ** Nuxt.js modulesnpm
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration
