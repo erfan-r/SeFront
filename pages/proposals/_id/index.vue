@@ -26,6 +26,11 @@
           <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">چکیده</div>
           <span>{{proposal.summary}}</span>
         </v-flex>
+        <v-flex md11 xs12 class=" blue lighten-5 justify-center text-center pa-1 mt-2 mb-1"
+                style="border-radius: 6px">
+          <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">فایل پروپوزال:</div>
+          <a href="http://192.168.43.246:3000/file/rev1">دانلود فایل</a>
+        </v-flex>
       </v-layout>
 
     </v-card>
@@ -39,7 +44,8 @@
 
         <v-flex md11 v-if="status===1" class="blue lighten-5 text-center pa-1 ma-2"
                 style="border-radius: 6px">
-          <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">هنوز هیچ داوری تعیین نشده
+          <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">
+            هنوز هیچ داوری تعیین نشده
           </div>
         </v-flex>
         <v-flex md11 v-if="status===2 || status===3" class="blue lighten-5 text-center pa-1 ma-2"
@@ -158,8 +164,32 @@
 
         <v-flex md11 v-if="status===1" class="blue lighten-5 text-center pa-1 ma-2"
                 style="border-radius: 6px">
-          <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">هنوز هیچ داوری تعیین نشده
+          <div class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">
+            هنوز هیچ داوری تعیین نشده
           </div>
+          <v-form v-model="valid" v-if="getType().id === 4" ref="addJudgeForm" @submit.prevent="addJudges()">
+            <v-select
+              v-model="selectedProfs[0]"
+              outlined
+              :rules="[validationRules.required]"
+              :items="profs"
+              item-text="name"
+              item-value="_id"
+              label="داور اول"
+            ></v-select>
+            <v-select
+              v-model="selectedProfs[1]"
+              outlined
+              :rules="[validationRules.required]"
+              :items="profs"
+              item-text="name"
+              item-value="_id"
+              label="داور دوم"
+            ></v-select>
+            <v-flex xs12>
+              <v-btn block large color="primary" type="submit" :loading="loading">ثبت</v-btn>
+            </v-flex>
+          </v-form>
         </v-flex>
         <v-flex md11 v-if="status===2 || status===3" class="blue lighten-5 text-center pa-1 ma-2"
                 style="border-radius: 6px">
@@ -203,13 +233,15 @@
           {{getPersianDate(proposal.date_revision, 1)}}
           </span>
           مهلت دارند که پروپوزال اصلاحی را ارسال کنند
-          <div class="align-center mx-10 my-1 mb-2 ">
-            فایل اصلاحی
+          <div v-if="getType.id === 3 && proposal.date_revision>0"
+               class="justify-center font-weight-bold my-1 mb-2 blue--text text--darken-4">فایل پروپوزال:
           </div>
+          <a v-if="getType.id === 3  && proposal.date_revisio>0" :href="proposal.file">دانلود
+            فایل</a>
         </v-flex>
         <v-flex md11 v-if="status===4" class="blue lighten-5 text-center pa-1 ma-2"
                 style="border-radius: 6px">
-          <div class="justify-center font-weight-bold my-1 mb-2" v-if="Date.now()<proposal.date_defense">
+          <div class="justify-center font-weight-bold my-1 mb-2" v-if="Date.now() < proposal.date_defense">
             دانشجو باید در تاریخ
             {{getPersianDate(proposal.date_defense, 2).date}}
             راس ساعت
@@ -376,6 +408,14 @@
             'نظر دکتر 2'
           ]
         },
+        profs: [
+          'دکتر شاملی',
+          'دکتر حقیقی',
+          'دکتر نشاطی',
+          'دکتر وحیدی',
+          'دکتر شمس فرد',
+          'دکتر علی اکبری'
+        ],
         statusText: [
           'ثبت شده، در انتظار تعیین داوران',
           'در انتظار تایید داوران',
@@ -387,6 +427,7 @@
           'اعلام نتیجه ی نهایی و رای شورای دانشکده',
           'رد شده در مرحله اول'
         ],
+        selectedProfs: [],
         snack_text: '',
         color: '',
         valid: false,
@@ -423,14 +464,33 @@
           console.log(this.proposal)
         }
       },
+      addJudges () {
+        if (this.$refs.addJudgeForm.validate()) {
+          this.loading = true
+          let body
+          body = {
+            proposal_id: this.$route.params.id,
+            profs: this.selectedProfs
+          }
+
+          this.$axios.$post(`/proposals/judges`, body)
+            .then(response => {
+              window.location.reload(true)
+            })
+            .catch(reason => {
+              this.loading = false
+            })
+          console.log(this.proposal)
+        }
+      },
       defenseProposal (accepted) {
         if (this.$refs.defenseForm.validate()) {
           this.loading = true
           let body
-            body = {
-              proposal_id: this.$route.params.id,
-              accepted: accepted
-            }
+          body = {
+            proposal_id: this.$route.params.id,
+            accepted: accepted
+          }
 
           this.$axios.$post(`/proposals/defense`, body)
             .then(response => {
@@ -511,6 +571,15 @@
     },
     created () {
       this.onCreate()
+      this.$axios.$get(`/groups/profs`).then(response => {
+        console.log(response)
+        this.profs = response.result
+      }).catch(err => {
+        console.log(err)
+        this.snack_text = err.response.data.status
+        this.color = 'error'
+        this.snackbar = true
+      })
     }
   }
 </script>
